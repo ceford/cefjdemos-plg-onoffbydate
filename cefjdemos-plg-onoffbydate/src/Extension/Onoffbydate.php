@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 3 or later
  */
 
-namespace Cefjdemos\Plugin\System\Onoffbydate\Extension;
+namespace Cefjdemos\Plugin\Console\Onoffbydate\Extension;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -17,7 +17,7 @@ namespace Cefjdemos\Plugin\System\Onoffbydate\Extension;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Factory;
 use Joomla\Event\SubscriberInterface;
-use Cefjdemos\Plugin\System\Onoffbydate\Console\OnoffbydateCommand;
+use Cefjdemos\Plugin\Console\Onoffbydate\Console\OnoffbydateCommand;
 
 final class Onoffbydate extends CMSPlugin implements SubscriberInterface
 {
@@ -25,8 +25,6 @@ final class Onoffbydate extends CMSPlugin implements SubscriberInterface
      * Returns the event this subscriber will listen to.
      *
      * @return  array
-     *
-     * @since   4.0.0
      */
     public static function getSubscribedEvents(): array
     {
@@ -39,10 +37,20 @@ final class Onoffbydate extends CMSPlugin implements SubscriberInterface
      * Returns the command class for the Onoffbydate CLI plugin.
      *
      * @return  void
-     *
-     * @since   4.0.0
      */
     public function registerCommands(): void
+    {
+        $myCommand = new OnoffbydateCommand();
+        $myCommand->setParams($this->params);
+        $this->getApplication()->addCommand($myCommand);
+    }
+
+    /**
+     * Returns the command class for the Onoffbydate CLI plugin.
+     *
+     * @return  void
+     */
+    public function oldregisterCommands(): void
     {
         $serviceId = 'onoffbydate.action';
 

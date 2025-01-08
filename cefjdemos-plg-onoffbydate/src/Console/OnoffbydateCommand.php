@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 3 or later
  */
 
-namespace Cefjdemos\Plugin\System\Onoffbydate\Console;
+namespace Cefjdemos\Plugin\Console\Onoffbydate\Console;
 
 // phpcs:disable PSR1.Files.SideEffects
 \defined('_JEXEC') or die;
@@ -54,20 +54,19 @@ class OnoffbydateCommand extends AbstractCommand
     private $ioStyle;
 
     /**
-     * Configures the IO
-     *
-     * @param   InputInterface   $input   Console Input
-     * @param   OutputInterface  $output  Console Output
-     *
-     * @return void
-     *
-     * @since 4.0.0
-     *
+     * The params associated with the plugin, plus getter and setter
+     * These are injected into this class by the plugin instance
      */
-    private function configureIO(InputInterface $input, OutputInterface $output)
+    protected $params;
+
+    protected function getParams()
     {
-        $this->cliInput = $input;
-        $this->ioStyle = new SymfonyStyle($input, $output);
+        return $this->params;
+    }
+
+    public function setParams($params)
+    {
+        $this->params = $params;
     }
 
     /**
@@ -96,13 +95,13 @@ class OnoffbydateCommand extends AbstractCommand
             'module id'
         );
 
-        $help = "<info>%command.name%</info> Toggles module Enabled/Disabled state
-            \nUsage: <info>php %command.full_name% season action module_id where\n
-            season is one of winter or summer or weekday or weekend,
-            action is one of publish or unpublish and
-            module_id is the id of the module to publish or unpublish.</info>";
+        $help = "<info>%command.name%</info> Toggles module Enabled/Disabled state\n";
+        $help .= "Usage: <info>php %command.full_name% season action module_id where\n";
+        $help .= "    season is one of winter or summer or weekday or weekend,\n";
+        $help .= "    action is one of publish or unpublish and\n";
+        $help .= "    module_id is the id of the module to publish or unpublish.</info>\n";
 
-        $this->setDescription('Called by cron to set the enabled state of a module.');
+        $this->setDescription('Called by a cron job to set the enabled state of a module.');
         $this->setHelp($help);
     }
 
@@ -132,11 +131,23 @@ class OnoffbydateCommand extends AbstractCommand
                 $result = $this->weekend($module_id, $action);
                 break;
             default:
-                $this->ioStyle->error("Unknown action: {$action}");
+                $this->ioStyle->error("Unknown season: {$season}");
                 return 0;
         }
 
         return 1;
+    }
+
+    protected function publish($module_id, $published)
+    {
+        $db = Factory::getContainer()->get(DatabaseInterface::class);
+        //$db    = $this->getDatabase();
+        $query = $db->getQuery(true);
+        $query->update('#__modules')
+            ->set('published = ' . $published)
+            ->where('id = ' . $module_id);
+        $db->setQuery($query);
+        $db->execute();
     }
 
     protected function weekend($module_id, $action)
@@ -175,15 +186,20 @@ class OnoffbydateCommand extends AbstractCommand
         $this->ioStyle->success("That seemed to work. {$msg} Module {$module_id} has been {$state}");
     }
 
-    protected function publish($module_id, $published)
+    /**
+     * Configures the IO
+     *
+     * @param   InputInterface   $input   Console Input
+     * @param   OutputInterface  $output  Console Output
+     *
+     * @return void
+     *
+     * @since 4.0.0
+     *
+     */
+    private function configureIO(InputInterface $input, OutputInterface $output)
     {
-        $db = Factory::getContainer()->get(DatabaseInterface::class);
-        //$db    = $this->getDatabase();
-        $query = $db->getQuery(true);
-        $query->update('#__modules')
-            ->set('published = ' . $published)
-            ->where('id = ' . $module_id);
-        $db->setQuery($query);
-        $db->execute();
+        $this->cliInput = $input;
+        $this->ioStyle = new SymfonyStyle($input, $output);
     }
 }

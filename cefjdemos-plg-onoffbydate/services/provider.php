@@ -2,7 +2,7 @@
 
 /**
  * @package     Cefdemosonoffbydate.Plugin
- * @subpackage  System.onoffbydate
+ * @subpackage  Console.onoffbydate
  *
  * @copyright   (C) 2025 Clifford E Ford.
  * @license     GNU General Public License version 3 or later
@@ -16,8 +16,9 @@ use Joomla\CMS\Extension\PluginInterface;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\DI\Container;
 use Joomla\DI\ServiceProviderInterface;
+use Joomla\CMS\Factory;
 use Joomla\Event\DispatcherInterface;
-use Cefjdemos\Plugin\System\Onoffbydate\Extension\Onoffbydate;
+use Cefjdemos\Plugin\Console\Onoffbydate\Extension\Onoffbydate;
 
 return new class implements ServiceProviderInterface {
     /**
@@ -27,17 +28,22 @@ return new class implements ServiceProviderInterface {
      *
      * @return  void
      *
-     * @since   4.0.0
+     * @since   4.2.0
      */
     public function register(Container $container)
     {
         $container->set(
             PluginInterface::class,
             function (Container $container) {
-                $subject = $container->get(DispatcherInterface::class);
-                $config  = (array) PluginHelper::getPlugin('system', 'onoffbydate');
+                $dispatcher = $container->get(DispatcherInterface::class);
+                $dispatcher = $container->get(DispatcherInterface::class);
+                $plugin     = new Onoffbydate(
+                    $dispatcher,
+                    (array) PluginHelper::getPlugin('console', 'onoffbydate')
+                );
+                $plugin->setApplication(Factory::getApplication());
 
-                return new Onoffbydate($subject, $config);
+                return $plugin;
             }
         );
     }
