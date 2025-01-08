@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @package     Cefdemosonoffbydate.Plugin
- * @subpackage  Console.onoffbydate
+ * @package     Cefjdemos.Plugin
+ * @subpackage  Console.Onoffbydate
  *
- * @copyright   (C) 2025 Clifford E Ford.
- * @license     GNU General Public License version 3 or later
+ * @copyright   Copyright (C) 2025 Clifford E Ford.
+ * @license     GNU General Public License version 3 or later.
  */
 
 // phpcs:disable PSR1.Files.SideEffects

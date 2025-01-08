@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @package     Cefdemosonoffbydate.Console
- * @subpackage  Onoffbydate
+ * @package     Cefjdemos.Plugin
+ * @subpackage  Console.Onoffbydate
  *
- * @copyright   Copyright (C) 2025 Clifford E Ford. All rights reserved.
- * @license     GNU General Public License version 3 or later
+ * @copyright   Copyright (C) 2025 Clifford E Ford.
+ * @license     GNU General Public License version 3 or later.
  */
 
 namespace Cefjdemos\Plugin\Console\Onoffbydate\Console;
@@ -17,13 +17,9 @@ namespace Cefjdemos\Plugin\Console\Onoffbydate\Console;
 use Joomla\CMS\Factory;
 use Joomla\Console\Command\AbstractCommand;
 use Joomla\Database\DatabaseInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Joomla\Database\DatabaseAwareTrait;
 

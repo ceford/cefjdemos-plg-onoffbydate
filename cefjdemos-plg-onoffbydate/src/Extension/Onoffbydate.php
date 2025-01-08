@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @package     Cefdemosonoffbydate.Console
- * @subpackage  Onoffbydate
+ * @package     Cefjdemos.Plugin
+ * @subpackage  Console.Onoffbydate
  *
- * @copyright   Copyright (C) 2005 - 2021 Clifford E Ford. All rights reserved.
- * @license     GNU General Public License version 3 or later
+ * @copyright   Copyright (C) 2025 Clifford E Ford.
+ * @license     GNU General Public License version 3 or later.
  */
 
 namespace Cefjdemos\Plugin\Console\Onoffbydate\Extension;
