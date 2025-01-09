@@ -15,7 +15,6 @@ namespace Cefjdemos\Plugin\Console\Onoffbydate\Extension;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\Plugin\CMSPlugin;
-use Joomla\CMS\Factory;
 use Joomla\Event\SubscriberInterface;
 use Cefjdemos\Plugin\Console\Onoffbydate\Console\OnoffbydateCommand;
 
@@ -43,28 +42,5 @@ final class Onoffbydate extends CMSPlugin implements SubscriberInterface
         $myCommand = new OnoffbydateCommand();
         $myCommand->setParams($this->params);
         $this->getApplication()->addCommand($myCommand);
-    }
-
-    /**
-     * Returns the command class for the Onoffbydate CLI plugin.
-     *
-     * @return  void
-     */
-    public function oldregisterCommands(): void
-    {
-        $serviceId = 'onoffbydate.action';
-
-        Factory::getContainer()->share(
-            $serviceId,
-            function (\Psr\Container\ContainerInterface $container) {
-                // Do stuff to create command class and return it
-                return new OnoffbydateCommand();
-            },
-            true
-        );
-
-        Factory::getContainer()
-        ->get(\Joomla\CMS\Console\Loader\WritableLoaderInterface::class)
-        ->add('onoffbydate:action', $serviceId);
     }
 }

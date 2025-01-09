@@ -36,7 +36,6 @@ return new class implements ServiceProviderInterface {
             PluginInterface::class,
             function (Container $container) {
                 $dispatcher = $container->get(DispatcherInterface::class);
-                $dispatcher = $container->get(DispatcherInterface::class);
                 $plugin     = new Onoffbydate(
                     $dispatcher,
                     (array) PluginHelper::getPlugin('console', 'onoffbydate')

@@ -15,6 +15,7 @@ namespace Cefjdemos\Plugin\Console\Onoffbydate\Console;
 // phpcs:enable PSR1.Files.SideEffects
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\Console\Command\AbstractCommand;
 use Joomla\Database\DatabaseInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -74,10 +75,16 @@ class OnoffbydateCommand extends AbstractCommand
      */
     protected function configure(): void
     {
+        $lang = Factory::getApplication()->getLanguage();
+        $test = $lang->load(
+            'plg_console_onoffbydate',
+            JPATH_BASE . '/plugins/console/onoffbydate'
+        );
+
         $this->addArgument(
             'season',
             InputArgument::REQUIRED,
-            'winter or summer or weekday or weekend'
+            'winter or weekend'
         );
         $this->addArgument(
             'action',
@@ -91,13 +98,13 @@ class OnoffbydateCommand extends AbstractCommand
             'module id'
         );
 
-        $help = "<info>%command.name%</info> Toggles module Enabled/Disabled state\n";
-        $help .= "Usage: <info>php %command.full_name% season action module_id where\n";
-        $help .= "    season is one of winter or summer or weekday or weekend,\n";
-        $help .= "    action is one of publish or unpublish and\n";
-        $help .= "    module_id is the id of the module to publish or unpublish.</info>\n";
+        $help = Text::_('PLG_CONSOLE_ONOFFBYDATE_HELP_1');
+        $help .= Text::_('PLG_CONSOLE_ONOFFBYDATE_HELP_2');
+        $help .= Text::_('PLG_CONSOLE_ONOFFBYDATE_HELP_3');
+        $help .= Text::_('PLG_CONSOLE_ONOFFBYDATE_HELP_4');
+        $help .= Text::_('PLG_CONSOLE_ONOFFBYDATE_HELP_5');
 
-        $this->setDescription('Called by a cron job to set the enabled state of a module.');
+        $this->setDescription(Text::_('PLG_CONSOLE_ONOFFBYDATE_DESCRIPTION'));
         $this->setHelp($help);
     }
 
@@ -127,7 +134,8 @@ class OnoffbydateCommand extends AbstractCommand
                 $result = $this->weekend($module_id, $action);
                 break;
             default:
-                $this->ioStyle->error("Unknown season: {$season}");
+                $result = Text::_('PLG_CONSOLE_ONOFFBYDATE_ERROR', $season);
+                $this->ioStyle->error($result);
                 return 0;
         }
 
@@ -151,17 +159,19 @@ class OnoffbydateCommand extends AbstractCommand
         // get the day of the week
         $day = date('w');
         if (in_array($day, array(0,6))) {
-            $msg = "Today is a weekend.";
+            $msg = Text::_('PLG_CONSOLE_ONOFFBYDATE_TODAY_IS_IN_A_WEEKEND');
+            $published = $action === 'publish' ? 1 : 0;
         } else {
-            $msg = "Today is not a weekend.";
+            $msg = Text::_('PLG_CONSOLE_ONOFFBYDATE_TODAY_IS_NOT_IN_A_WEEKEND');
+            $published = $action === 'publish' ? 0 : 1;
         }
-        $published = $action === 'publish' ? 1 : 0;
 
         $this->publish($module_id, $published);
 
-        $state = empty($published) ? 'Unpublished' : 'Published';
+        $state = empty($published) ? Text::_('JUNPUBLISHED') : Text::_('JPUBLISHED');
+        $result = Text::sprintf('PLG_CONSOLE_ONOFFBYDATE_SUCCESS', $msg, $module_id, $state);
 
-        $this->ioStyle->success("That seemed to work. {$msg} Module {$module_id} has been {$state}");
+        $this->ioStyle->success($result);
     }
 
     protected function winter($module_id, $action)
@@ -169,17 +179,21 @@ class OnoffbydateCommand extends AbstractCommand
         // get the month of the month
         $month = date('n');
         if (in_array($month, array(1,2,11,12))) {
-            $msg = "Today is in winter.";
+            $msg = Text::_('PLG_CONSOLE_ONOFFBYDATE_TODAY_IS_IN_WINTER');
+            $published = $action === 'publish' ? 1 : 0;
         } else {
-            $msg = "Today is not in winter.";
+            $msg = Text::_('PLG_CONSOLE_ONOFFBYDATE_TODAY_IS_NOT_IN_WINTER');
+            $published = $action === 'publish' ? 0 : 1;
         }
-        $published = $action === 'publish' ? 1 : 0;
 
         $this->publish($module_id, $published);
 
-        $state = empty($published) ? 'Unpublished' : 'Published';
+        $state = empty($published) ? Text::_('JUNPUBLISHED') : Text::_('JPUBLISHED');
 
-        $this->ioStyle->success("That seemed to work. {$msg} Module {$module_id} has been {$state}");
+        $state = empty($published) ? Text::_('JUNPUBLISHED') : Text::_('JPUBLISHED');
+        $result = Text::sprintf('PLG_CONSOLE_ONOFFBYDATE_SUCCESS', $msg, $module_id, $state);
+
+        $this->ioStyle->success($result);
     }
 
     /**

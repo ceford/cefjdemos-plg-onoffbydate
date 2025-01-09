@@ -14,6 +14,14 @@
         <folder plugin="onoffbydate">services</folder>
         <folder>src</folder>
     </files>
+    <changelogurl>https://raw.githubusercontent.com/ceford/cefjdemos-plg-onoffbydate/main/changelog.xml</changelogurl>
+    <updateservers>
+        <!-- Note: No spaces or linebreaks allowed between the server tags -->
+        <server type="extension" priority="2" name="Cefjdemosonoffbydate Update Site">https://raw.githubusercontent.com/ceford/cefjdemos-plg-onoffbydate/main/updates.xml</server>
+    </updateservers>
     <config>
+        <fields>
+
+        </fields>
     </config>
 </extension>

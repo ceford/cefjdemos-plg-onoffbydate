@@ -1,0 +1,10 @@
+<changelogs>
+    <changelog>
+        <element>plg_console_onoffbydate</element>
+        <type>plugin</type>
+        <version>0.3.0</version>
+        <addition>
+            <item>First release.</item>
+        </addition>
+    </changelog>
+</changelogs>
